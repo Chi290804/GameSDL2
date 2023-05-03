@@ -36,6 +36,8 @@ public:
 	int GetWidth();
 
 	int GetHeight();
+
+	void Free();
 private:
 	int posX, posY;
 

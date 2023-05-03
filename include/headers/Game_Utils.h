@@ -71,21 +71,26 @@ void GenerateEnemy(Enemy& enemy1,
     SDL_Rect(&gEnemyClips)[FLYING_FRAMES],
     SDL_Renderer* gRenderer);
 
-bool CheckColission1(Character character,
+bool CheckColission(Character character,
     SDL_Rect* char_clip,
     Enemy enemy,
     SDL_Rect* enemy_clip = nullptr);
-    
-/*bool CheckColission2(Bullet bullet,
-    Enemy enemy,
-    SDL_Rect* enemy_clip = nullptr);*/
+
 bool CheckEnemyColission(Character character,
-   // Bullet bullet,
     Enemy enemy1,
     Enemy enemy2,
     Enemy enemy3,
     SDL_Rect* char_clip,
     SDL_Rect* enemy_clip = nullptr);
+
+bool CheckColission2(const SDL_Rect & object1, const SDL_Rect & object2) ;
+/*bool CheckEnemyColission2(Bullet bullet,
+	Enemy enemy1,
+	Enemy enemy2, 
+	Enemy enemy3,
+	SDL_Rect bullet_clip,
+	SDL_Rect* enemy_clip= nullptr
+	);*/
 
 void ControlCharFrame(int& frame);
 

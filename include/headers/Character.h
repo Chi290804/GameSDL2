@@ -2,8 +2,6 @@
 #define CHARACTER_H_
 
 #include "LTexture.h"
-//#include <vector>
-//#include "Bullet.h"
 
 #define JUMP 1
 #define FALL 2
@@ -16,7 +14,6 @@ public:
 	static const int FALL_SPEED = 8;
 
 	Character();
-	void setRect(int x, int y);
 
 	bool OnGround();
 
@@ -30,11 +27,7 @@ public:
 
 	int GetPosY();
 
-	/**/
-
 private:
-
-	//
 	int posX, posY;
 
 	int status;

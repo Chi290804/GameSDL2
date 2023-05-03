@@ -1,5 +1,4 @@
 #include "Game_Utils.h"
-#include "Bullet.h"
 
 std::string GetHighScoreFromFile(std::string path)
 {
@@ -337,7 +336,7 @@ void GenerateEnemy(Enemy& enemy1,
 	}
 }
 
-bool CheckColission1(Character character,
+bool CheckColission(Character character,
 	SDL_Rect* char_clip,
 	Enemy enemy, 
 	SDL_Rect* enemy_clip)
@@ -363,15 +362,6 @@ bool CheckColission1(Character character,
 		{
 			if (bottom_a - TRASH_PIXEL_2 >= top_b)
 			{
-				collide = false;
-			}
-			if (top_a <= bottom_b && top_a >= top_b)
-			{
-				collide = true;
-			}
-			
-			if (bottom_a >= bottom_b && bottom_a <= top_b)
-			{
 				collide = true;
 			}
 		}
@@ -403,72 +393,7 @@ bool CheckColission1(Character character,
 	return collide;
 }
 
-/*bool CheckColission2(Bullet bullet,
-    Enemy enemy,
-    SDL_Rect* enemy_clip = nullptr) 
-{
-	bool collide = false;
-  	int left_a = bullet.getX();
-	int right_a = bullet.getX() + 57;
-	int top_a = bullet.getY();
-	int bottom_a = bullet.getY() + 33;
-
-	if (enemy.GetType() == ON_GROUND_ENEMY)
-	{
-		const int TRASH_PIXEL_1 = 25;
-		const int TRASH_PIXEL_2 = 30;
-
-		int left_b = enemy.GetPosX();
-		int right_b = enemy.GetPosX() + enemy.GetWidth();
-		int top_b = enemy.GetPosY();
-		int bottom_b = enemy.GetPosY() + enemy.GetHeight();
-
-		if (right_a - TRASH_PIXEL_1 >= left_b && left_a + TRASH_PIXEL_1 <= right_b)
-		{
-			if (bottom_a - TRASH_PIXEL_2 >= top_b)
-			{
-				collide = false;
-			}
-			if (top_a <= bottom_b && top_a >= top_b)
-			{
-				collide = true;
-			}
-			
-			if (bottom_a >= bottom_b && bottom_a <= top_b)
-			{
-				collide = true;
-			}
-		}
-	}
-	else
-	{
-		const int TRASH_PIXEL_1 = 22;
-		const int TRASH_PIXEL_2 = 18;
-
-		int left_b = enemy.GetPosX() + TRASH_PIXEL_1;
-		int right_b = enemy.GetPosX() + enemy_clip->w - TRASH_PIXEL_1;
-		int top_b = enemy.GetPosY();
-		int bottom_b = enemy.GetPosY() + enemy_clip->h - TRASH_PIXEL_2;
-
-		if (right_a >= left_b && left_a <= right_b)
-		{
-			if (top_a <= bottom_b && top_a >= top_b)
-			{
-				collide = true;
-			}
-			
-			if (bottom_a >= bottom_b && bottom_a <= top_b)
-			{
-				collide = true;
-			}
-		}
-	}
-
-	return collide;
-}*/
-
 bool CheckEnemyColission(Character character,
-	//Bullet bullet,
 	Enemy enemy1,
 	Enemy enemy2, 
 	Enemy enemy3,
@@ -476,32 +401,132 @@ bool CheckEnemyColission(Character character,
 	SDL_Rect* enemy_clip
 	)
 {
-	if (CheckColission1(character, char_clip, enemy1))
+	if (CheckColission(character, char_clip, enemy1))
 	{
 		return true;
 	}
-	if (CheckColission1(character, char_clip, enemy2))
+	if (CheckColission(character, char_clip, enemy2))
 	{
 		return true;
 	}
-	if (CheckColission1(character, char_clip, enemy3, enemy_clip))
+	if (CheckColission(character, char_clip, enemy3, enemy_clip))
 	{
 		return true;
 	}
-	/*if (CheckColission2(bullet, enemy1)){
-		return true;
-	}
-	if (CheckColission2(bullet, enemy2))
-	{
-		return true;
-	}
-	if (CheckColission2(bullet, enemy3, enemy_clip))
-	{
-		return true;
-	}*/
 	return false;
 }
 
+bool CheckColission2(const SDL_Rect & object1, const SDL_Rect & object2) 
+{
+	bool collide = false;
+  	int left_a = object1.x;
+	int right_a = object1.x + 57;
+	int top_a = object1.y;
+	int bottom_a = object1.y + 33;
+
+	int left_b = object2.x;
+	int right_b = object2.x + 57;
+	int top_b = object2.y;
+	int bottom_b = object2.y + 57;
+
+	if (left_a > left_b && left_a < right_b)
+  	{
+		if (top_a > top_b && top_a < bottom_b)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (left_a > left_b && left_a < right_b)
+	{
+		if (bottom_a > top_b && bottom_a < bottom_b)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (right_a > left_b && right_a < right_b)
+	{
+		if (top_a > top_b && top_a < bottom_b)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (right_a > left_b && right_a < right_b)
+	{
+		if (bottom_a > top_b && bottom_a < bottom_b)
+		{
+		collide = true;
+		}
+  	}
+  
+  // Case 2: size object 1 < size object 2
+	if (left_b > left_a && left_b < right_a)
+	{
+		if (top_b > top_a && top_b < bottom_a)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (left_b > left_a && left_b < right_a)
+	{
+		if (bottom_b > top_a && bottom_b < bottom_a)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (right_b > left_a && right_b < right_a)
+	{
+		if (top_b > top_a && top_b < bottom_a)
+		{
+		collide = true;
+		}
+  	}
+ 
+	if (right_b > left_a && right_b < right_a)
+	{
+		if (bottom_b > top_a && bottom_b < bottom_a)
+		{
+		collide = true;
+		}
+  	}
+ 
+   // Case 3: size object 1 = size object 2
+	if (top_a == top_b && right_a == right_b && bottom_a == bottom_b)
+	{
+		collide = true;
+	}
+ 	return collide;
+}
+
+	
+
+/*bool CheckEnemyColission2(Bullet bullet,
+	Enemy enemy1,
+	Enemy enemy2, 
+	Enemy enemy3,
+	SDL_Rect bullet_clip,
+	SDL_Rect* enemy_clip
+	)
+	{
+	if (CheckColission2(bullet, bullet_clip, enemy1))
+	{
+		return true;
+	}
+	if (CheckColission2(bullet, bullet_clip, enemy2))
+	{
+		return false;
+	}
+	if (CheckColission2(bullet, bullet_clip, enemy3, enemy_clip))
+	{
+		return false;
+	}
+	return false;
+	}
+*/
 void ControlCharFrame(int &frame)
 {
 	frame += FRAME_INCREASEMENT;

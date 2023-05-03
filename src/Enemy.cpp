@@ -17,8 +17,7 @@ Enemy::Enemy(int _type)
 	else if (type == ON_GROUND_ENEMY)
 	{
 		posX = rand() % (SCREEN_WIDTH + ENEMY_POSITION_RANGE) + SCREEN_WIDTH;
-		//posY = GROUND - 8;
-		posY = rand() % SCREEN_HEIGHT - 8;
+		posY = GROUND - 8;
 	}
 
 	EnemyTexture = nullptr;
@@ -100,7 +99,7 @@ int Enemy::GetType()
 	{
 		return IN_AIR_ENEMY;
 	}
-	else
+	else if(type == ON_GROUND_ENEMY)
 	{
 		return ON_GROUND_ENEMY;
 	}

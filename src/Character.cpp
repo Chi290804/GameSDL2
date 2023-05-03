@@ -7,10 +7,7 @@ Character::Character()
 
 	status = 0;
 }
-void Character::setRect(int x, int y){
-	posX = x;
-	posY = y;
-}
+
 bool Character::OnGround()
 {
 	return posY == GROUND;
@@ -32,7 +29,6 @@ void Character::HandleEvent(SDL_Event& e, Mix_Chunk *gJump)
 			}
 		}
 	}
-	
 }
 
 void Character::Move()

@@ -3,8 +3,10 @@
 #include "LTexture.h"
 #include "Button.h"
 #include "Character.h"
-#include "Enemy.h"
 #include "Bullet.h"
+#include "Enemy.h"
+#include "House.h"
+
 
 const std::string LAYER[BACKGROUND_LAYER] = {
 	"imgs/background/layer01.png",
@@ -42,7 +44,6 @@ LTexture gMenuTexture;
 LTexture gInstructionTexture;
 LTexture gBackgroundTexture[BACKGROUND_LAYER];
 LTexture gCharacterTexture;
-LTexture gBulletTexture;
 LTexture gGroundTexture;
 LTexture gPlayButtonTexture;
 LTexture gHelpButtonTexture;
@@ -55,6 +56,7 @@ LTexture gText1Texture;
 LTexture gScoreTexture;
 LTexture gText2Texture;
 LTexture gHighScoreTexture;
+LTexture gHouseTexture;
 
 Button PlayButton(PLAY_BUTON_POSX, PLAY_BUTTON_POSY);
 Button HelpButton(HELP_BUTTON_POSX, HELP_BUTTON_POSY);
@@ -66,6 +68,19 @@ Button ContinueButton(CONTINUE_BUTTON_POSX, CONTINUE_BUTTON_POSY);
 Character character;
 
 Bullet bullet;
+
+std::vector<House*> MakeHouse(){
+							std::vector<House*> houseList;
+							House* oneHouse = new House[20];
+							for ( int i=0 ; i<20 ; i++){
+								House* aHouse = (oneHouse + i);
+								if (aHouse !=NULL){
+									aHouse -> LoadFromFile("imgs/enemy/house-01.png", gRenderer);
+
+									houseList.push_back(aHouse);
+								}
+							}
+						}
 
 int main(int argc, char* argv[])
 {
@@ -188,9 +203,8 @@ int main(int argc, char* argv[])
 							currentClip_Character = &gCharacterClips[0];
 							character.Render(currentClip_Character, gRenderer, gCharacterTexture);
 						}
-
 						bullet.Shoot(gRenderer);
-
+						
 
 						enemy1.Move(acceleration);
 						enemy1.Render(gRenderer);
@@ -210,6 +224,39 @@ int main(int argc, char* argv[])
 						DrawPlayerScore(gText1Texture, gScoreTexture, textColor, gRenderer, gFont, score);
 						DrawPlayerHighScore(gText2Texture, gHighScoreTexture, textColor, gRenderer, gFont, highscore);
 
+						
+						std::vector<House*> listHouse = MakeHouse();
+
+						std::vector<Bullet*>arrBullet = bullet.getBulletList();
+						for( int r =0 ; r < arrBullet.size(); r++){
+							Bullet* pBullet = arrBullet.at(r);
+							if ( pBullet != NULL){
+								for ( int t=0 ; t < listHouse.size(); t++){
+										House* aHouse = listHouse.at(t);
+										if ( aHouse !=NULL){
+											SDL_Rect tRect;
+											tRect.x = aHouse->GetPosX();
+											tRect.y = aHouse->GetPosY();
+											tRect.h = aHouse->GetHeight();
+											tRect.w = aHouse->GetWidth();
+
+											SDL_Rect bRect = pBullet->GetRect();
+											if (CheckColission2(bRect, tRect)){
+												pBullet->Remove(r);
+												aHouse->Free();
+												listHouse.erase(listHouse.begin()+t);
+
+											}
+
+
+										}
+									}
+								
+								}
+							}
+						
+
+
 						if (CheckEnemyColission(character,
 							enemy1, enemy2, enemy3,
 							currentClip_Character, currentClip_Enemy))
@@ -220,6 +267,12 @@ int main(int argc, char* argv[])
 							Quit = true;
 						}
 
+						for ( int i= 0; i < listHouse.size(); i++){
+							House* oneHouse = listHouse.at(i);
+							if (oneHouse != NULL){
+								oneHouse->LoadFromFile("imgs/enemy/house-01.png", gRenderer);
+							}
+						}
 
 						SDL_RenderPresent(gRenderer);
 
@@ -529,11 +582,6 @@ bool LoadMedia()
 			if (!gLoseTexture.LoadFromFile("imgs/background/lose.png", gRenderer))
 			{
 				std::cout << "Failed to load lose image." << std::endl;
-				success = false;
-			}
-			if (!gBulletTexture.LoadFromFile("imgs/Bullet/Bullet.png", gRenderer))
-			{
-				std::cout << "Failed to load bullet image." << std::endl;
 				success = false;
 			}
 		}

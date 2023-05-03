@@ -65,10 +65,10 @@ void Bullet::HandleEvent(SDL_Event& e, Mix_Chunk *gJump,  SDL_Renderer *gRendere
             pBullet -> isMove = true;
             pBulletList.push_back(pBullet);
         }
-        if (e.button.button == SDL_BUTTON_RIGHT){
+        /*if (e.button.button == SDL_BUTTON_RIGHT){
                     pBullet -> Swap(Character);
                     //Character.Render( currentClip, gRenderer, gCharacterTexture);
-        }
+        }*/
     }
 }
 void Bullet::Render(SDL_Renderer* gRenderer, SDL_Rect* currentClip)
@@ -181,6 +181,19 @@ void Bullet::Shoot(SDL_Renderer* des){
         }
     }
 }
-void Bullet::Swap(Character Character/*,SDL_Rect* currentClip, SDL_Renderer *gRenderer, LTexture gCharacterTexture*/){
-    Character.setRect(posX, posY);
+
+void Bullet::Remove(const int& bli){
+    int size = pBulletList.size();
+    if (size > 0 && bli < size){
+        Bullet* pBullet = pBulletList.at(bli);
+        pBulletList.erase(pBulletList.begin() + bli);
+
+        if ( pBullet){
+            delete pBullet;
+            pBullet = NULL;
+        }
+    }
 }
+/*void Bullet::Swap(Character Character/*,SDL_Rect* currentClip, SDL_Renderer *gRenderer, LTexture gCharacterTexture){
+    Character.setRect(posX, posY);
+}*/

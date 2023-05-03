@@ -1,8 +1,8 @@
 #ifndef BULLET_H_
 #define BULLET_H_
 
-#include"Game_Base.h"
-#include"Game_Utils.h"
+//#include"Game_Base.h"
+//#include"Game_Utils.h"
 #include"Character.h"
 #include <vector>
 #include "Vector.h"
@@ -12,6 +12,7 @@ class Bullet
 private:
     int posX;
     int posY;
+    SDL_Rect _rect;
     bool isMove;
     int eWidth, eHeight;
     std::vector<Bullet*> pBulletList;
@@ -48,7 +49,10 @@ public:
     void LoadFromFile(std::string path, SDL_Renderer* gRenderer);
     void HandleEvent(SDL_Event& e, Mix_Chunk *gJump, SDL_Renderer *gRenderer,Character Character);
     void Shoot(SDL_Renderer* des);
-    void Swap(Character Character);
+    void Remove(const int& bli);
+    void setRect() { _rect.x = posX ; _rect.y = posY;}
+    SDL_Rect GetRect() const{return _rect;}
+    //void Swap(Character Character);
     //void setBulletDir(const unsigned int & bulletDir) (BulletDir = *bulletDir;)
     //int getBulletDir() const (return BulletDir;)
     /*void setInitialMousePos(float x, float y);
